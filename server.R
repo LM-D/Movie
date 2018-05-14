@@ -68,6 +68,17 @@ shinyServer(function(input, output) {
                title="WordCloud: Movie Genres")
    })
    
+   output$p_3d <- renderPlotly({ 
+     plot_ly(movie, x = ~imdb_score, y = ~budget/1000000, z = ~gross/1000000, 
+             color = ~profit_flag, colors = c('#BF382A', '#0C4B8E'),size = I(3)) %>%
+       add_markers() %>%
+       layout(scene = list(xaxis = list(title = 'IMDB Score'),
+                           yaxis = list(title = 'Budget (M$)'),
+                           zaxis = list(title = 'Revenue (M$)')),
+              title = "INTERACTIVE 3D Scatter plot: IMDB Score vs Revenue vs Budget",
+              showlegend = FALSE)
+     })
+   
   
 #=====================================================================   
    output$topplot<-renderGvis({

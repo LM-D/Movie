@@ -188,7 +188,10 @@ shinyUI(
                     tabsetPanel(
                       tabPanel("Profit",  plotOutput("proplot"), br(),
                                "The relationship between budget and gross, 
-                               investigating whether more budget can bring out higher gross.")))
+                               investigating whether more budget can bring out higher gross."),
+                      tabPanel("3D plot",
+                               plotlyOutput("p_3d"), br() )
+                      ))
                         ),
      
 #====================================================================      
