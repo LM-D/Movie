@@ -67,9 +67,9 @@ shinyUI(
                           br()),
                  column(width = 6,
                         plotOutput("charcor1"),
-                        "From the plot, only duration and IMBD score has a high correlation. 
-                        Face number in posters has a negative correaltion with IMBD score. 
-                        Genre has little correlatin with score Interesting, director name has no correlation with IMDB score."
+                        "From the plot, only duration and IMBD score hace a high correlation. 
+                        Face number in posters has a negative correlation with IMBD score. 
+                        Genre has little correlation with score Interesting, director name has no correlation with IMDB score."
                         )
                  ),
                  br(),
@@ -85,11 +85,11 @@ shinyUI(
                           plotOutput("charcor2"),
                           "Color and title year has highly positive correlation. 
                             Color and aspect ratia,gross has smaller positive correlations. 
-                          Actor 1 namem has very small positive correlation with gross, meaning who plays the movies does not have impact on the gross. 
+                          Actor 1 name has very small positive correlation with gross, meaning who plays the movies does not have impact on the gross. 
                         Title year and aspect ratio and color are highly positively correlated.
                         IMDB score has very small positive correlation with actor 1 name ,which means who was the actor 1 does not make the movie has a higher score. 
                         Interestingly, IMDB score has a negative correlation with title year,which means the old movies seems to have a higher score. 
-                          The result agrees with out pbservation from the scatter plot. 
+                          The result agrees with out observation from the scatter plot. 
                           IMDB and aspect ratio has small positive correlation. 
                           IMDB has a strong positive correlation with gross."                   )
                    
@@ -114,17 +114,21 @@ shinyUI(
               
                mainPanel(
                  tabsetPanel(
-                   tabPanel("Genre",plotOutput("genplot"),br() ))),
+                   tabPanel("Graph",  
+                            plotOutput("genplot"),br() ),
+                   tabPanel("WordCloud",
+                            plotOutput("w"), br() )
+                   )),
                
 #====================================================================      
                
                sidebarPanel(
                  selectInput("top",
-                             label = "Choose a graph",
-                             choices = c("Cast total facebook likes","Actor 1 facebook like"),
-                             selected = "Cast total facebook likes")
+                             label = "Top graph",
+                             choices = c("Director","Actor 1"),
+                             selected = "Actor 1")
                ),
-               
+
                mainPanel(
                  tabsetPanel(
                    tabPanel("Top actors",htmlOutput("topplot"),br() ))),
@@ -141,7 +145,7 @@ shinyUI(
                       tabPanel("Year", plotOutput("yearplot"),
                                "There are many outliers for title year. ",br(),
                                "The mojority of data points are around the year of 2000 and later, which make sense that this is less movies in the early years.", br(), 
-                               "Also, an intering notice is that movies from early years tend to have higher scores.",br()
+                               "Also, an interesting notice is that movies from early years tend to have higher scores.",br()
                                ))),
        
     
@@ -159,18 +163,33 @@ shinyUI(
                                 tabPanel("Score", plotOutput("scoplot") ,br()))),
                   
 #====================================================================      
+# 
+#                     sidebarPanel(
+#                             sliderInput("pro",
+#                                         "Profit",
+#                                         min=floor((min(movie$gross)-min(movie$budget))/100)*100,
+#                                         max=floor((max(movie$gross)-max(movie$budget))/10000000)*10000000,
+#                                         value = c(min,max),
+#                                         step = 100000 )),
+#                     mainPanel(
+#                       tabsetPanel(
+#                         tabPanel("Profit",  plotOutput("proplot"), br())))
+#             ),
 
-                    sidebarPanel(
-                            sliderInput("pro",
-                                        "Profit",
-                                        min=floor((min(movie$gross)-min(movie$budget))/100)*100,
-                                        max=floor((max(movie$gross)-max(movie$budget))/10000000)*10000000,
-                                        value = c(min,max),
-                                        step = 100000 )),
-                    mainPanel(
-                      tabsetPanel(
-                        tabPanel("Profit",  plotOutput("proplot"), br())))
-            ),
+                  
+                  sidebarPanel(
+                    sliderInput("pro",
+                                "Budget",
+                                min=floor(min(movie$budget)/100)*100,
+                                max=floor(max(movie$budget)/100000000)*100000000,
+                                value = c(min,max),
+                                step = 100000 )),
+                  mainPanel(
+                    tabsetPanel(
+                      tabPanel("Profit",  plotOutput("proplot"), br(),
+                               "The relationship between budget and gross, 
+                               investigating whether more budget can bring out higher gross.")))
+                        ),
      
 #====================================================================      
 #                             SELECT
@@ -178,44 +197,84 @@ shinyUI(
 
     tabPanel("Select", 
              
-             fluidPage(
-               
-               # App title ----
-               titlePanel("Year-Director-Score"),
-               
-               # Sidebar layout with input and output definitions ----
+             tabsetPanel(
+               tabPanel("Top gross",
                sidebarLayout(
-                 
-                 # Sidebar panel for inputs ----
                  sidebarPanel(
-                   
-                   # Input: Text for providing a caption ----
-                   # Note: Changes made to the caption in the textInput control
-                   # are updated in the output area immediately as you type
-                   selectInput("y",
-                              "Year:",
-                              c("All",sort(unique(movie_yds$title_year)))),
-                   
-                   # Input: Selector for choosing dataset ----
-                   selectInput("d",
-                              "Director:",
-                               c("All",sort(unique(as.character(movie_yds$director_name))))),
-                   
-                   # Input: Numeric entry for number of obs to view ----
-                   selectInput("s",
-                             "IMDB Score:",
-                           c("All",sort(unique(as.character(movie_yds$imdb_score)))))
+                   selectInput("ran_g",
+                              "Choose range:",
+                              c(10,100,500))
                  ),
+                 mainPanel(
+                   
+                   tableOutput("gtop")
+                   
+                 ))),
+                 
+#====================================================================      
+                 
+                
+                   tabPanel("Top director",
+                     sidebarLayout(
+                sidebarPanel(
+                   selectInput("ran_d",
+                               "Choose range:",
+                               c(10,100,500))
+                 ),
+                 mainPanel(
+                   
+                   tableOutput("dtop")
+                   
+                
+                 )
+                 )),
+#====================================================================      
+
+                  tabPanel("Top actor",
+                           sidebarLayout(
+                             sidebarPanel(
+                               
+                  selectInput("ran_a1",
+                              "Choose range:",
+                              c(10,100,500))
+                ),
+                mainPanel(
+                  
+                  tableOutput("a1top")
+                  
+                )
+               )
+               ) 
+             
+
+))
+                 
+                 # sidebarPanel(
+                 #   
+                 #   # Input: Text for providing a caption ----
+                 #   # Note: Changes made to the caption in the textInput control
+                 #   # are updated in the output area immediately as you type
+                 #   selectInput("y",
+                 #               "Year:",
+                 #               c("All",sort(unique(movie_yds$title_year)))),
+                 #   
+                 #   # Input: Selector for choosing dataset ----
+                 #   selectInput("d",
+                 #               "Director:",
+                 #               c("All",sort(unique(as.character(movie_yds$director_name))))),
+                 #   
+                 #   # Input: Numeric entry for number of obs to view ----
+                 #   selectInput("s",
+                 #               "IMDB Score:",
+                 #               c("All",sort(unique(as.character(movie_yds$imdb_score)))))
+                 # ),
+                 
+                 
+                 
                  
                  # Main panel for displaying outputs ----
-                 mainPanel(
-               
-                   tableOutput("view")
-                   
-                 )
-               )
-             ) 
-    )
+            
+
              
         
     #      tabPanel("Select", 

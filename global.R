@@ -13,9 +13,16 @@ library(reshape)
 library(RColorBrewer)
 
 movie = read.csv("movie.csv",header = T)
-movieo = read.csv("movie_o.csv",header = T)
+#movieo = read.csv("movie_o.csv",header = T)
 movie_num = read.csv("movie_num.csv",header = T)
 movie_yds<-dplyr::select(movie,movie_title,title_year,director_name,imdb_score,director_facebook_likes,gross,budget,genres,country)
+
+direc_top<-dplyr::select(movie,"director_name","director_facebook_likes")
+act1_top<-dplyr::select(movie,"actor_1_name","actor_1_facebook_likes")
+prof_top<-dplyr::select(movie,"movie_title","imdb_score" ,"gross","title_year","genres","country","language","content_rating")
+gt<-arrange(prof_top,desc(gross),desc(imdb_score),desc(title_year))
+dt<-dplyr::distinct(arrange(direc_top,desc(director_facebook_likes)))
+a1t<-dplyr::distinct(arrange(act1_top,desc(actor_1_facebook_likes)))
 
 
 movie <- transform(movie, budget = ifelse(country == "South Korea", budget/1173.49, budget))
@@ -39,7 +46,7 @@ cor_names<-names(movie[-c(1,2,7,10,11,12,15,17,18,20,21,22,29,30)])
 genre <- Corpus(VectorSource(movie$genres_2))
 genre_dtm <- DocumentTermMatrix(genre)
 genre_freq <- colSums(as.matrix(genre_dtm))
-freq <- sort(colSums(as.matrix(genre_dtm)), decreasing=TRUE) 
+freq <- sort(colSums(as.matrix(genre_dtm)), decreasing=TRUE)
 genre_wf <- data.frame(word=names(genre_freq), freq=genre_freq)
 
 word_assoc <- function(word)
@@ -87,21 +94,61 @@ assoc <- rbind(drama_assoc,comedy_assoc,thriller_assoc,action_assoc,
                romance_assoc,adventure_assoc,crime_assoc)
 
 
-#top actors
-m1 = movie %>% select(actor_1_name, actor_1_facebook_likes) %>% 
-  group_by(actor_1_name) %>% summarize(appear.count=n())
+# #top actors
+# a11 = movie %>% select(actor_1_name, actor_1_facebook_likes) %>%
+#   group_by(actor_1_name) %>% summarize(appear.count_a1=n())
+# 
+# a12 = left_join(movie, a11, by="actor_1_name")
+# a13 = a12 %>% select(actor_1_name, actor_1_facebook_likes, appear.count_a1) %>%
+#   distinct %>% arrange(desc(appear.count_a1))
+# 
+# Bubblea1 <- gvisBubbleChart(a13, idvar="actor_1_name",
+#                           xvar="appear.count_a1", yvar="actor_1_facebook_likes",
+#                           sizevar="appear.count_a1",
+#                           #colorvar="title_year",
+#                           options=list(
+#                             #hAxis='{minValue:75, maxValue:125}',
+#                             width=1000, height=800
+#                           ), chartid = "foo"
+# )
+# 
+# #
+# #top directors
+# d1 = movie %>% select(director_name, director_facebook_likes) %>%
+#   group_by(director_name) %>% summarize(appear.count_d=n())
+# 
+# d2 = left_join(movie, d1, by="director_name")
+# d3 = d2 %>% select(director_name, director_facebook_likes, appear.count_d) %>%
+#   distinct %>% arrange(desc(appear.count_d))
+# 
+# 
+# Bubbled <- gvisBubbleChart(d3, idvar="director_name",
+#                           xvar="appear.count_d", yvar="director_facebook_likes",
+#                           sizevar="appear.count_d",
+#                           #colorvar="title_year",
+#                           options=list(
+#                             #hAxis='{minValue:75, maxValue:125}',
+#                             width=1000, height=800
+#                           ), chartid = "foo"
+# )
+# 
 
-m2 = left_join(movie, m1, by="actor_1_name")
-m3 = m2 %>% select(actor_1_name, actor_1_facebook_likes, appear.count) %>%
-  distinct %>% arrange(desc(appear.count))
-
-Bubble <- gvisBubbleChart(m3, idvar="actor_1_name", 
-                          xvar="appear.count", yvar="actor_1_facebook_likes",
-                          sizevar="appear.count",
-                          #colorvar="title_year",
-                          options=list(
-                            #hAxis='{minValue:75, maxValue:125}',
-                            width=1000, height=800
-                          ), chartid = "foo"
-)
+# #top
+# m1 = movies %>% select(actor_1_name, actor_1_facebook_likes) %>%
+#   group_by(actor_1_name) %>% summarize(appear.count=n())
+# 
+# m2 = left_join(movies, m1, by="actor_1_name")
+# m3 = m2 %>% select(actor_1_name, actor_1_facebook_likes, appear.count) %>%
+#   distinct %>% arrange(desc(appear.count))
+# 
+# 
+# Bubble <- gvisBubbleChart(m3, idvar="actor_1_name",
+#                           xvar="appear.count", yvar="actor_1_facebook_likes",
+#                           sizevar="appear.count",
+#                           #colorvar="title_year",
+#                           options=list(
+#                             #hAxis='{minValue:75, maxValue:125}',
+#                             width=1000, height=800
+#                           )
+# )
 
