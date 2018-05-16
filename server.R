@@ -126,23 +126,6 @@ shinyServer(function(input, output) {
      }
    })
    
-  #Bubble_a1
-   
-   # output$topplot<-renderGvis({
-   # 
-   #   if (input$top == "Director"){
-   #     Bubbled
-   #   }
-   #   else if (input$top=="Actor 1"){
-   #     Bubblea1
-   #   }
-   # 
-   # 
-   # })
-   
-   
-   
-
 #=====================================================================   
   
   output$yearplot<-renderPlot({
@@ -182,29 +165,7 @@ shinyServer(function(input, output) {
       ylab("Gross")+
       xlim(input$pro[1],input$pro[2])
   })
-  # output$proplot<-renderPlot({
-  #   ggplot(movie, aes(x=movie$imdb_score))+
-  #     geom_histogram(aes(fill=..count..),binwidth = 0.5)+
-  #     scale_x_continuous(name = "IMDB Score",breaks = seq(input$IMDB[1],input$IMDB[2]),limits =c(input$IMDB[1],input$IMDB[2]))+
-  #     theme(axis.text.x=element_text(angle=45, hjust=1))+
-  #     ggtitle("Movie Sore")+
-  #     scale_fill_gradient("Count", low = "blue", high = "red")
-  # })
-  
-  # output$proplot<-renderPlot({
-  #   ggplot(movie, aes(x=(movie$gross-movie$budget), y=movie$budget,color = (movie$profit_flag)+1))+
-  #     geom_point(position="dodge", stat="identity")+
-  #     theme(axis.text.x=element_text(angle=45, hjust=1))+
-  #     ggtitle("Movie Profit")+
-  #     xlab("Profit")+
-  #     ylab("Budget")+
-  #     xlim(input$pro[1],input$pro[2])
-  # })
-  
-  
- # output$value <- renderPrint({ input$date })
  
-  
 #====================================================================      
 #                             SELECT
 #====================================================================      
@@ -240,14 +201,10 @@ shinyServer(function(input, output) {
        output$a1top <- renderTable({
          data<-dplyr::slice(a1t,1:input$ran_a1)
        })
-#===============================================================
-
        
        
-       
-   
+#====================================================================      
+#                           END
+#====================================================================      
+      
 })
-
-
-
-

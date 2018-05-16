@@ -60,15 +60,15 @@ shinyUI(
                  fluidRow(
                    column(width=4,
                           br(),
-                          h3("Correlation Variable:"),
+                          h3("Correlation Variable"),
                           code("Director name"),br(),code("Duration"), 
                           br(),
                           code("Face number in poster"),br(),code("IMDB score") ,br(),code("Genres"),                    
                           br()),
                  column(width = 6,
                         plotOutput("charcor1"),
-                        "From the plot, only duration and IMBD score hace a high correlation. 
-                        Face number in posters has a negative correlation with IMBD score. 
+                        "From the plot, only duration and IMDB score hace a high correlation. 
+                        Face number in posters has a negative correlation with IMDB score. 
                         Genre has little correlation with score Interesting, director name has no correlation with IMDB score."
                         )
                  ),
@@ -76,7 +76,7 @@ shinyUI(
                  fluidRow(
                    column(width=4,
                           br(),
-                          h3("Correlation Variable:"),
+                          h3("Correlation Variable"),
                           code("Color"),br(),code("Actor 1 name"), 
                           br(),
                           code("Title year"),br(),code("IMDB score") ,br(),code("Aspect ratio"),br(),
@@ -153,7 +153,7 @@ shinyUI(
 
                   sidebarPanel(
                             sliderInput("IMDB",
-                                        "IMDB Score:",
+                                        "IMDB Score",
                                         min = 0,
                                         max = 10,
                                         value = c(5,8),
@@ -205,7 +205,7 @@ shinyUI(
                sidebarLayout(
                  sidebarPanel(
                    selectInput("ran_g",
-                              "Choose range:",
+                              "Choose range",
                               c(10,100,500))
                  ),
                  mainPanel(
@@ -221,7 +221,7 @@ shinyUI(
                      sidebarLayout(
                 sidebarPanel(
                    selectInput("ran_d",
-                               "Choose range:",
+                               "Choose range",
                                c(10,100,500))
                  ),
                  mainPanel(
@@ -238,7 +238,7 @@ shinyUI(
                              sidebarPanel(
                                
                   selectInput("ran_a1",
-                              "Choose range:",
+                              "Choose range",
                               c(10,100,500))
                 ),
                 mainPanel(
@@ -273,13 +273,7 @@ shinyUI(
                  # ),
                  
                  
-                 
-                 
-                 # Main panel for displaying outputs ----
-            
-
-             
-        
+    
     #      tabPanel("Select", 
     #        fluidPage(
     #           titlePanel("Year-Director-Score"),
@@ -312,8 +306,6 @@ shinyUI(
     #   
     # )
 
-
-
 #====================================================================      
 #                           END
 #====================================================================      
@@ -322,52 +314,3 @@ shinyUI(
   )
   
 )
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
- #======================================================================== 
-#   fluidPage(
-#   
-#   # Application title
-#   titlePanel("Movie Analysis"),
-#   
-#   # Sidebar with a slider input for number of bins 
-#   sidebarLayout(
-#     sidebarPanel(
-#       selectInput("graph",
-#                   label = "Choose a graph",
-#                   choices = c("Genre","Association"),
-#                   selected = "Genre"),
-#       
-#      
-#       sliderInput("year", "Year released",
-#                   min(movie$title_year), 
-#                   max(movie$title_year), 
-#                   value = c(1980, 2013)),
-# 
-#        sliderInput("IMDB",
-#                    "IMDB Score:",
-#                    min = 0,
-#                    max = 10,
-#                    value = 8,step = 0.1),
-#        dateRangeInput("date",
-#                       label = "Choise a date")
-#     ),
-#     
-#     # Show a plot of the generated distribution
-#     mainPanel(
-#       
-#       plotOutput("plot1"),
-#        verbatimTextOutput("value")
-#     )
-#   )
-# ))

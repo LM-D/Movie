@@ -59,30 +59,6 @@ word_assoc <- function(word)
   return(assoc_1)
 }
 
-# #Dividing the genre from the movie data frame and assigning it to the container gensplit
-# #and filling all the columns in a cyclic order
-# gensplit<-colsplit(movie$genres,split="\\|",names = c("g1","g2","g3","g4","g5","g6","g7","g8"))
-# #Changing the data type of gensplit to character and making factors to FALSE
-# gensplit <- data.frame(lapply(gensplit, as.character), stringsAsFactors=FALSE)
-# #Removing the cyclic duplicates
-# #Using the duplicated function to find all the duplicates in a row(vector)
-# #after the first instance of occurance
-# for (i in 1: nrow(gensplit)) { gensplit[i,duplicated(as.character(gensplit[i,]))]<-""}
-# #Genre based imdb rating from boxplot visualization.
-# movie_sel<-movie%>%select(movie_title,title_year,imdb_score)
-# ygs<-cbind(gensplit,movie_sel)
-# 
-# #Casting, basically splitting all the movies based on every genres. id.vars is the default(rule) argument
-# #and the result is displayed as variables and values
-# ygs<-melt(ygs,id.vars=1:2)
-# #Removing the third column
-# ygs<-ygs[-3]
-# ygs<-ygs %>% filter(value!="") %>% droplevels() #filtering out unknown genres
-# #Ploting Boxplots based on different genres(all the movie scores are used for a particular genre to calculate the 5 point summary to create the Boxplots)
-# #ggplot(aes(y=imdb_score,x=value,fill=value),data=genrescore)+geom_boxplot()+theme(axis.text.x = element_text(angle=70,hjust=1))
-# 
-
-
 drama_assoc <- word_assoc("drama")
 comedy_assoc <- word_assoc("comedy")
 thriller_assoc <- word_assoc("thriller")
@@ -92,63 +68,4 @@ adventure_assoc <- word_assoc("adventure")
 crime_assoc <- word_assoc("crime")
 assoc <- rbind(drama_assoc,comedy_assoc,thriller_assoc,action_assoc,
                romance_assoc,adventure_assoc,crime_assoc)
-
-
-# #top actors
-# a11 = movie %>% select(actor_1_name, actor_1_facebook_likes) %>%
-#   group_by(actor_1_name) %>% summarize(appear.count_a1=n())
-# 
-# a12 = left_join(movie, a11, by="actor_1_name")
-# a13 = a12 %>% select(actor_1_name, actor_1_facebook_likes, appear.count_a1) %>%
-#   distinct %>% arrange(desc(appear.count_a1))
-# 
-# Bubblea1 <- gvisBubbleChart(a13, idvar="actor_1_name",
-#                           xvar="appear.count_a1", yvar="actor_1_facebook_likes",
-#                           sizevar="appear.count_a1",
-#                           #colorvar="title_year",
-#                           options=list(
-#                             #hAxis='{minValue:75, maxValue:125}',
-#                             width=1000, height=800
-#                           ), chartid = "foo"
-# )
-# 
-# #
-# #top directors
-# d1 = movie %>% select(director_name, director_facebook_likes) %>%
-#   group_by(director_name) %>% summarize(appear.count_d=n())
-# 
-# d2 = left_join(movie, d1, by="director_name")
-# d3 = d2 %>% select(director_name, director_facebook_likes, appear.count_d) %>%
-#   distinct %>% arrange(desc(appear.count_d))
-# 
-# 
-# Bubbled <- gvisBubbleChart(d3, idvar="director_name",
-#                           xvar="appear.count_d", yvar="director_facebook_likes",
-#                           sizevar="appear.count_d",
-#                           #colorvar="title_year",
-#                           options=list(
-#                             #hAxis='{minValue:75, maxValue:125}',
-#                             width=1000, height=800
-#                           ), chartid = "foo"
-# )
-# 
-
-# #top
-# m1 = movies %>% select(actor_1_name, actor_1_facebook_likes) %>%
-#   group_by(actor_1_name) %>% summarize(appear.count=n())
-# 
-# m2 = left_join(movies, m1, by="actor_1_name")
-# m3 = m2 %>% select(actor_1_name, actor_1_facebook_likes, appear.count) %>%
-#   distinct %>% arrange(desc(appear.count))
-# 
-# 
-# Bubble <- gvisBubbleChart(m3, idvar="actor_1_name",
-#                           xvar="appear.count", yvar="actor_1_facebook_likes",
-#                           sizevar="appear.count",
-#                           #colorvar="title_year",
-#                           options=list(
-#                             #hAxis='{minValue:75, maxValue:125}',
-#                             width=1000, height=800
-#                           )
-# )
 
