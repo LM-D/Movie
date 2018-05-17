@@ -85,40 +85,29 @@ shinyServer(function(input, output) {
 
      if (input$top == "Director"){
 
-       d1 = movie %>% select(director_name, director_facebook_likes) %>%
-         group_by(director_name) %>% summarize(appear.count_d=n())
-
-       d2 = left_join(movie, d1, by="director_name")
-       d3 = d2 %>% select(director_name, director_facebook_likes, appear.count_d) %>%
-         distinct %>% arrange(desc(appear.count_d))
 
 
-       Bubble_d <- gvisBubbleChart(d3, idvar="director_name",
+
+       Bubble<- gvisBubbleChart(d3, idvar="director_name",
                                    xvar="appear.count_d", yvar="director_facebook_likes",
                                    sizevar="appear.count_d",
                                    #colorvar="title_year",
                                    options=list(
                                      #hAxis='{minValue:75, maxValue:125}',
-                                     width=1000, height=800
+                                     width=780, height=520
                                    ), chartid = "foo"
        )
 
      }
      else if (input$top=="Actor 1"){
-       a11 = movie %>% select(actor_1_name, actor_1_facebook_likes) %>%
-         group_by(actor_1_name) %>% summarize(appear.count_a1=n())
-
-       a12 = left_join(movie, a11, by="actor_1_name")
-       a13 = a12 %>% select(actor_1_name, actor_1_facebook_likes, appear.count_a1) %>%
-         distinct %>% arrange(desc(appear.count_a1))
-
-       Bubble_a1 <- gvisBubbleChart(a13, idvar="actor_1_name",
+ 
+       Bubble<- gvisBubbleChart(a13, idvar="actor_1_name",
                                     xvar="appear.count_a1", yvar="actor_1_facebook_likes",
                                    sizevar="appear.count_a1",
                                     #colorvar="title_year",
                                     options=list(
                                       #hAxis='{minValue:75, maxValue:125}',
-                                      width=1000, height=800
+                                      width=780, height=520
                                     ), chartid = "foo"
        )
 
@@ -170,22 +159,6 @@ shinyServer(function(input, output) {
 #                             SELECT
 #====================================================================      
   
-   
-  # # Filter data based on selections
-  # output$view <- renderTable({
-  #   data <- movie_yds
-  #   if (input$p != "All") {
-  #     data <- data[data$title_year == input$y,]
-  #   }
-  #   if (input$d != "All") {
-  #     data <- data[data$director_name == input$d,]
-  #   }
-  #   if (input$a1 != "All") {
-  #     data <- data[data$imdb_score == input$s,]
-  #   }
-  #   data
-  # 
-  # })
 
    
    # Filter data based on selections
@@ -201,6 +174,116 @@ shinyServer(function(input, output) {
        output$a1top <- renderTable({
          data<-dplyr::slice(a1t,1:input$ran_a1)
        })
+
+#====================================================================      
+#                         Documentation
+#====================================================================      
+       
+       output$cor_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('cor', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200, 
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+       output$cor_code <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('cor_code', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 100, 
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+#====================================================================      
+       output$gen_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('gen', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+
+       output$word_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('word', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+
+       output$assoc_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('assoc', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+#====================================================================      
+
+        output$act_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('act', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+
+       output$direct_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('direct', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+#====================================================================    
+
+       output$year_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('year', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+       output$budget_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('budget', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+       output$tD_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('3D', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+
+       
+#====================================================================    
+       
+       output$m_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('tm', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+       output$d_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('td', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+       output$a_image <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('ta', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 200,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
+       
+       output$t_code <- renderImage({
+         filename <- normalizePath(file.path('./www',
+                                             paste('top_code', '.jpg', sep='')))
+         list(src = filename,width = 380, height = 100,
+              alt = "Image correlation")
+       }, deleteFile = FALSE)
        
        
 #====================================================================      

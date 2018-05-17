@@ -109,7 +109,11 @@ shinyUI(
                  selectInput("graph",
                              label = "Choose a graph",
                              choices = c("Genre","Association"),
-                             selected = "Genre")
+                             selected = "Genre"),
+                 selectInput("top",
+                             label = "Top graph",
+                             choices = c("Director","Actor 1"),
+                             selected = "Actor 1")
                  ),
               
                mainPanel(
@@ -117,82 +121,40 @@ shinyUI(
                    tabPanel("Graph",  
                             plotOutput("genplot"),br() ),
                    tabPanel("WordCloud",
-                            plotOutput("w"), br() )
+                            plotOutput("w"), br() ),
+                   tabPanel("Top",htmlOutput("topplot"),br() )
                    )),
                
 #====================================================================      
-               
-               sidebarPanel(
-                 selectInput("top",
-                             label = "Top graph",
-                             choices = c("Director","Actor 1"),
-                             selected = "Actor 1")
-               ),
-
-               mainPanel(
-                 tabsetPanel(
-                   tabPanel("Top actors",htmlOutput("topplot"),br() ))),
-                   
-#====================================================================      
+   
 
                 sidebarPanel(
                             sliderInput("year", "Year released",
                                         min(movie$title_year), 
                                         max(movie$title_year), 
-                                        value = c(1980, 2013))),
+                                        value = c(1980, 2013)),
+                            sliderInput("pro",
+                                        "Budget",
+                                        min=floor(min(movie$budget)/100)*100,
+                                        max=floor(max(movie$budget)/100000000)*100000000,
+                                        value = c(min,max),
+                                        step = 100000 )),
                 mainPanel(
                     tabsetPanel(
                       tabPanel("Year", plotOutput("yearplot"),
                                "There are many outliers for title year. ",br(),
                                "The mojority of data points are around the year of 2000 and later, which make sense that this is less movies in the early years.", br(), 
                                "Also, an interesting notice is that movies from early years tend to have higher scores.",br()
-                               ))),
-       
-    
-#====================================================================      
-
-                  sidebarPanel(
-                            sliderInput("IMDB",
-                                        "IMDB Score",
-                                        min = 0,
-                                        max = 10,
-                                        value = c(5,8),
-                                        step = 0.1)),
-                            mainPanel(
-                              tabsetPanel(
-                                tabPanel("Score", plotOutput("scoplot") ,br()))),
-                  
-#====================================================================      
-# 
-#                     sidebarPanel(
-#                             sliderInput("pro",
-#                                         "Profit",
-#                                         min=floor((min(movie$gross)-min(movie$budget))/100)*100,
-#                                         max=floor((max(movie$gross)-max(movie$budget))/10000000)*10000000,
-#                                         value = c(min,max),
-#                                         step = 100000 )),
-#                     mainPanel(
-#                       tabsetPanel(
-#                         tabPanel("Profit",  plotOutput("proplot"), br())))
-#             ),
-
-                  
-                  sidebarPanel(
-                    sliderInput("pro",
-                                "Budget",
-                                min=floor(min(movie$budget)/100)*100,
-                                max=floor(max(movie$budget)/100000000)*100000000,
-                                value = c(min,max),
-                                step = 100000 )),
-                  mainPanel(
-                    tabsetPanel(
+                               ),
                       tabPanel("Profit",  plotOutput("proplot"), br(),
                                "The relationship between budget and gross, 
                                investigating whether more budget can bring out higher gross."),
                       tabPanel("3D plot",
                                plotlyOutput("p_3d"), br() )
-                      ))
-                        ),
+                      
+                      
+                      ))),
+       
      
 #====================================================================      
 #                             SELECT
@@ -250,67 +212,59 @@ shinyUI(
                ) 
              
 
-))
+)),
                  
-                 # sidebarPanel(
-                 #   
-                 #   # Input: Text for providing a caption ----
-                 #   # Note: Changes made to the caption in the textInput control
-                 #   # are updated in the output area immediately as you type
-                 #   selectInput("y",
-                 #               "Year:",
-                 #               c("All",sort(unique(movie_yds$title_year)))),
-                 #   
-                 #   # Input: Selector for choosing dataset ----
-                 #   selectInput("d",
-                 #               "Director:",
-                 #               c("All",sort(unique(as.character(movie_yds$director_name))))),
-                 #   
-                 #   # Input: Numeric entry for number of obs to view ----
-                 #   selectInput("s",
-                 #               "IMDB Score:",
-                 #               c("All",sort(unique(as.character(movie_yds$imdb_score)))))
-                 # ),
-                 
-                 
-    
-    #      tabPanel("Select", 
-    #        fluidPage(
-    #           titlePanel("Year-Director-Score"),
-    #     
-    #           # Create a new Row in the UI for selectInputs
-    #           fluidRow(
-    #             column(4,
-    #                    selectInput("y",
-    #                          "Year:",
-    #                          c("All",sort(unique(movie_yds$title_year))))
-    #              ),
-    #              column(4,
-    #                    selectInput("d",
-    #                          "Director:",
-    #                          c("All",
-    #                            sort(unique(as.character(movie_yds$director_name)))))
-    #                 ),
-    #                column(4,
-    #                        selectInput("s",
-    #                               "IMDB Score:",
-    #                          c("All",
-    #                            sort(unique(as.character(movie_yds$imdb_score)))))
-    #                )
-    #                ),
-    #     # Create a new row for the table.
-    #     fluidRow(
-    #       DT::dataTableOutput("table")
-    #     )
-    #   )
-    #   
-    # )
+
+
+#====================================================================      
+#                         Documentation
+#====================================================================      
+
+tabPanel("Documentation", 
+         
+         h1("Introduction to this Shiny APP"),
+         br(),
+         "This APP not only help people find a good movie, but also give information to movie producer to find the good team before making the movie.",
+         br(),br(),
+         
+              h3("Part 1: CORRELATION"),
+             "For this part, we use the cor() founction for the 16 Numeric variables to find the possible correlation.",br(),
+             "And the pairs.panels() founction to see if there are anyother variables (not just numeric) correlated to each other.",br(),
+             br(),
+             fluidRow(   column(width=6,imageOutput("cor_image")),      
+               column(width=6,br(),br(),br(),imageOutput("cor_code"))),
+         
+             h3("Part 2: EXPLORE"),
+             "In this part, we creat some plot for better understand the movie dataset.",br(),
+             "Here we have two Panel, each contain of three plot.",br(),
+             "The first Panel we have the Genre analysis, as we can see, we have two option: 
+             Genre and Association. Genre shows the frequency of the genre in movie, along with the wordcloud, which give a better visualisation. 
+             Inside Association we can see the related genre group.",br(),
+             br(),
+             fluidRow(   column(width=4,imageOutput("gen_image")),      
+                         column(width=4,imageOutput("word_image")),
+                         column(width=4,imageOutput("assoc_image"))),
+             "And then we use the numer of facebook likes for Actor 1 and Director and plot them to see who are the most popular.",br(),
+             fluidRow(   column(width=6,imageOutput("act_image")),      
+                         column(width=6,imageOutput("direct_image"))),
+            "The second Panel we based on the year of the movie to see how it relate to the IMDB score and country. 
+             And the other is about Budget and Gross, which we can see the relation of them. And the 3D plot for better visualisation.",br(),
+             fluidRow(  column(width=4,imageOutput("year_image")),      
+                        column(width=4,imageOutput("budget_image")),
+                        column(width=4,imageOutput("tD_image"))),
+            
+             h3("Part 3: SELECT"),
+             "This part we put 3 table for the top movie, top director and top actor. We use the packages (dplyr) to select and rearrange the dataset, so that we can see the top 10 or 100 or 500 of the whole data.",br(),
+            fluidRow(  column(width=6,imageOutput("m_image")),      
+                       column(width=6,imageOutput("d_image"))),
+            fluidRow(  column(width=6,imageOutput("a_image")),
+                       column(width=6,br(),br(),imageOutput("t_code")))
+             )
+
 
 #====================================================================      
 #                           END
 #====================================================================      
 
+  ))
   )
-  )
-  
-)
