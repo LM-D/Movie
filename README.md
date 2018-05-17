@@ -1,3 +1,3 @@
 # Movie
 
-https://dmiaolf.shinyapps.io/Movie_analysis/
+https://dmiao.shinyapps.io/Movie_analysis/
